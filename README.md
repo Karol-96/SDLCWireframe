@@ -1,24 +1,81 @@
+# Nutrition Plan Manager
 
-**Assessment 1.2 (Total Marks **20**)**
+A full-stack MERN application for managing nutrition plans and tracking meals. Built with Node.js, Express, React, and MongoDB.
 
-Assignment: **Software requirements analysis and design (**Full-Stack CRUD Application Development with DevOps Practices**)**
+## Features
 
+- User authentication (register, login, JWT)
+- Create, read, update, delete nutrition plans
+- Add and remove meals within plans
+- Track calories, protein, carbs, and fats
+- Filter and search plans
+- Responsive UI with Tailwind CSS
 
----
+## Tech Stack
 
-**Objective**
+- **Backend**: Node.js, Express.js, MongoDB, Mongoose
+- **Frontend**: React.js, Tailwind CSS, Axios
+- **Auth**: JWT, bcrypt
+- **CI/CD**: GitHub Actions, AWS EC2, PM2
 
-For this assessment, you have already been assigned a project. Your task is to develop a system that implements CRUD (Create, Read, Update, Delete) operations based on the selected project. The system should include both a user panel and an admin panel. Depending on the nature of your chosen project, you may decide how many CRUD operations are required to support the functionality of the system. You have been provided with a starter project that includes user authentication using Node.js, React.js, and MongoDB, your should extend this application based on your assigned project requirements. Ensure that the implemented features are appropriate and meaningful for your selected project. Your project should include the following:
-In this assignment you will complete the following tasks:
+## Getting Started
 
-* **Basic Version Control using GitHub**
-* **Development, CI/CD Integration for Automated Deployment**
-* **Project report**
+### Prerequisites
 
- 
----
+- Node.js v18+
+- MongoDB (local or Atlas)
+- npm
 
-**GitHub link of the starter project: **[https://github.com/nahaQUT/sampleapp_IFQ636.git](https://github.com/nahaQUT/sampleapp_IFQ636.git)
+### Setup
 
----
+1. Clone the repo
+```bash
+git clone https://github.com/Karol-969/sampleapp_IFQ636.git
+cd sampleapp_IFQ636
+```
 
+2. Install dependencies
+```bash
+npm run install-all
+```
+
+3. Configure environment variables
+```bash
+cp backend/.env.example backend/.env
+# Edit backend/.env with your MongoDB URI and JWT secret
+```
+
+4. Run in development mode
+```bash
+npm run dev
+```
+
+Backend runs on `http://localhost:5001`
+Frontend runs on `http://localhost:3000`
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | /api/auth/register | Register new user |
+| POST | /api/auth/login | Login user |
+| GET | /api/auth/profile | Get user profile |
+| PUT | /api/auth/profile | Update user profile |
+| GET | /api/plans | Get all plans (auth required) |
+| POST | /api/plans | Create a plan |
+| GET | /api/plans/:id | Get single plan |
+| PUT | /api/plans/:id | Update a plan |
+| DELETE | /api/plans/:id | Delete a plan |
+| POST | /api/plans/:id/meals | Add meal to plan |
+| DELETE | /api/plans/:id/meals/:mealId | Remove meal |
+
+## Branching Strategy
+
+- `main` - production branch
+- `feature/backend-crud` - backend CRUD operations
+- `feature/frontend-ui` - frontend pages and components
+- `feature/cicd-pipeline` - CI/CD and deployment config
+
+## Author
+
+Karol Bhandari - IFQ636 Assessment 1.2
