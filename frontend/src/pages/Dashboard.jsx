@@ -1,9 +1,12 @@
 import {useAuth} from '../context/AuthContext'
 import {Link} from 'react-router-dom'
+import {useEffect} from 'react'
 
 // dashboard / home page
 const Dashboard = () =>{
   const {user} = useAuth()
+  // TODO: could add a stats section here showing total plans, total meals etc
+  // would need another api call tho
 
   return(
     <div className="max-w-4xl mx-auto mt-10 px-4">
