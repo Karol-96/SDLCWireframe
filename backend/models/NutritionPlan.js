@@ -1,25 +1,26 @@
 const mongoose = require('mongoose')
 
-//meal schema - embedded inside plan
+// meal schema - embedded inside plan
+// ref: https://mongoosejs.com/docs/subdocs.html
 const mealSchema = new mongoose.Schema({
-  mealName:{
+  mealName: {
     type: String,
     required: true
   },
-  mealType:{
-    type:String,
-    enum:['breakfast','lunch','dinner','snack'],
-    default:'lunch'
+  mealType: {
+    type: String,
+    enum: ['breakfast','lunch','dinner','snack'],
+    default: 'lunch'
   },
   calories:{
-    type:Number,
+    type: Number,
     default:0
   },
   protien:{
     type:Number,
-    default:0
+    default: 0
   },
-  carbs:{
+  carbs: {
     type: Number,
     default: 0
   },
@@ -28,45 +29,47 @@ const mealSchema = new mongoose.Schema({
     default:0
   },
   notes: String
-},{ timestamps:true })
+}, {timestamps: true})
 
 
 const nutritionPlanSchema = new mongoose.Schema({
-  user:{
+  user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref:'User',
+    ref: 'User',
     required: true
   },
   planName:{
-    type:String,
-    required:[true, 'Plan name is required']
-  },
-  description:{
     type: String,
-    default:''
+    required: [true, 'Plan name is required']
   },
-  goal:{
-    type:String,
-    enum:['weight_loss','muscle_gain','maintenance','calorie_tracking'],
+  description: {
+    type: String,
+    default: ''
+  },
+  goal: {
+    type: String,
+    enum: ['weight_loss','muscle_gain','maintenance', 'calorie_tracking'],
     default:'maintenance'
   },
   targetCalories:{
-    type:Number,
-    default: 2000
+    type: Number,
+    default:2000
   },
-  startDate:{
-    type:Date,
+  startDate: {
+    type: Date,
     default: Date.now
   },
-  endDate: {
+  endDate:{
     type: Date,
   },
-  status: {
-    type:String,
-    enum:['active','paused','completed'],
-    default:'active'
+  status:{
+    type: String,
+    enum: ['active','paused','completed'],
+    default: 'active'
   },
   meals: [mealSchema]
-},{ timestamps: true })
+  // might add a notes field later for general plan notes
+}, {timestamps: true})
 
+// console.log('NutritionPlan model loaded')
 module.exports = mongoose.model('NutritionPlan', nutritionPlanSchema)

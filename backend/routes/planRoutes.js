@@ -11,12 +11,16 @@ const {
   deleteMealFromPlan
 } = require('../controllers/planController')
 
-//all routes need authentication
+// protect all routes - user must be logged in
 router.use(protect)
 
+// plan CRUD routes
 router.route('/').get(getPlans).post(makePlan)
 router.route('/:id').get(fetchPlanById).put(updatePlan).delete(removePlan)
+
+// meal routes (nested under plan)
 router.post('/:id/meals',addMealToPlan)
 router.delete('/:id/meals/:mealId', deleteMealFromPlan)
+// router.put('/:id/meals/:mealId', updateMeal) // maybe add this later
 
 module.exports = router
