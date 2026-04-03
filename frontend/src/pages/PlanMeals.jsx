@@ -43,13 +43,16 @@ const PlanMeals = () => {
   const addMeal = async(e)=>{
     e.preventDefault()
     try{
+      console.log('adding meal:', mealData)
       const res = await axiosInstance.post(`/api/plans/${id}/meals`,mealData,{
         headers:{Authorization:`Bearer ${user.token}`}
       })
       setPlan(res.data)
+      //reset the form
       setMealData({mealName:'',mealType:'lunch',calories:'',protien:'',carbs:'',fats:'',notes:''})
       setShowForm(false)
     }catch(err){
+      console.log(err)
       alert('Failed to add meal')
     }
   }

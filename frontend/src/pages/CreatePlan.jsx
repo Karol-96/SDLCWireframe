@@ -1,34 +1,41 @@
 import {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
-import {useAuth} from '../context/AuthContext'
+import { useAuth} from '../context/AuthContext'
 import axiosInstance from '../axiosConfig'
 
-const CreatePlan = ()=>{
+// create plan page
+const CreatePlan = ()=> {
   const {user} = useAuth()
   const navigate = useNavigate()
+  const [isSubmitting,setIsSubmitting] = useState(false) // prevent double click
   const [formData, setFormData] = useState({
-    planName:'',
-    description:'',
-    goal:'maintenance',
-    targetCalories: 2000,
-    startDate:'',
-    endDate:''
+    planName: '',
+    description: '',
+    goal: 'maintenance',
+    targetCalories:2000,
+    startDate: '',
+    endDate: ''
   })
 
-  const handleChange =(e)=>{
-    setFormData({...formData,[e.target.name]: e.target.value})
+  const handleChange = (e) =>{
+    setFormData({...formData, [e.target.name]:e.target.value})
   }
 
   // submit the form
-  const submitForm = async(e)=>{
+  const submitForm = async(e) =>{
     e.preventDefault()
-    try{
-      await axiosInstance.post('/api/plans',formData,{
-        headers:{Authorization:`Bearer ${user.token}`}
+    if(isSubmitting) return
+    setIsSubmitting(true)
+    try {
+      const res = await axiosInstance.post('/api/plans', formData,{
+        headers:{ Authorization:`Bearer ${user.token}` }
       })
+      console.log('plan created', res.data._id)
       navigate('/plans')
     }catch(err){
+      console.log(err)
       alert('Failed to create plan. Check your inputs.')
+      setIsSubmitting(false)
     }
   }
 
@@ -41,18 +48,19 @@ const CreatePlan = ()=>{
           <input type="text" name="planName" value={formData.planName}
             onChange={handleChange} required
             className="w-full p-2 border rounded"
-            placeholder="e.g. Summer Diet"/>
+            placeholder="e.g. Summer Diet" />
         </div>
         <div>
           <label className="block text-sm font-medium mb-1">Description</label>
           <textarea name="description" value={formData.description}
             onChange={handleChange} rows="3"
             className="w-full p-2 border rounded"
-            placeholder="Brief description of your plan"/>
+            placeholder="Brief description of your plan" />
         </div>
         <div>
           <label className="block text-sm font-medium mb-1">Goal</label>
-          <select name="goal" value={formData.goal} onChange={handleChange} className="w-full p-2 border rounded">
+          <select name="goal" value={formData.goal} onChange={handleChange}
+            className="w-full p-2 border rounded">
             <option value="weight_loss">Weight Loss</option>
             <option value="muscle_gain">Muscle Gain</option>
             <option value="maintenance">Maintenance</option>
@@ -62,13 +70,13 @@ const CreatePlan = ()=>{
         <div>
           <label className="block text-sm font-medium mb-1">Target Calories</label>
           <input type="number" name="targetCalories" value={formData.targetCalories}
-            onChange={handleChange} className="w-full p-2 border rounded"/>
+            onChange={handleChange} className="w-full p-2 border rounded" />
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium mb-1">Start Date</label>
-            <input type="date" name="startDate" value={formData.startDate}
-              onChange={handleChange} className="w-full p-2 border rounded"/>
+            <input type="date" name="startDate" value={ formData.startDate}
+              onChange={handleChange} className="w-full p-2 border rounded" />
           </div>
           <div>
             <label className="block text-sm font-medium mb-1">End Date</label>
@@ -76,7 +84,8 @@ const CreatePlan = ()=>{
               onChange={handleChange} className="w-full p-2 border rounded"/>
           </div>
         </div>
-        <button type="submit" className="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700">
+        <button type="submit"
+          className="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700">
           Create Plan
         </button>
       </form>

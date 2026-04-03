@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react'
-import {useParams,Link} from 'react-router-dom'
+import {useParams,Link, useNavigate} from 'react-router-dom'
 import {useAuth} from '../context/AuthContext'
 import axiosInstance from '../axiosConfig'
 
@@ -17,6 +17,7 @@ const PlanDetail = ()=>{
         })
         setPlan(res.data)
       }catch(err){
+        console.log('error loading plan:', err)
         alert('Failed to load plan details')
       }finally{
         setLoading(false)
@@ -29,6 +30,7 @@ const PlanDetail = ()=>{
   if(!plan) return <div className="text-center mt-10">Plan not found</div>
 
   //calc total cals from meals
+  // const totalProtein = plan.meals?.reduce((sum,m) => sum + (m.protien || 0), 0) || 0
   const totalMealCals = plan.meals?.reduce((sum,m) => sum + (m.calories || 0), 0) || 0
 
   return(

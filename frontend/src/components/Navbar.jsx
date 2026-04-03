@@ -1,8 +1,13 @@
 import {Link} from 'react-router-dom'
 import {useAuth} from '../context/AuthContext'
 
+// navbar component
 const Navbar = ()=>{
   const {user, logout} = useAuth()
+
+  //const handleLogout = () => {
+  //  if(window.confirm('are you sure?')) logout()
+  //}
 
   return(
     <nav className="bg-green-600 text-white p-4 shadow-md">
