@@ -78,4 +78,4 @@ Frontend runs on `http://localhost:3000`
 
 ## Author
 
-Karol Bhandari - IFQ636 Assessment 1.2
+Karol Bhandari - IFN636 Assessment 1.2
