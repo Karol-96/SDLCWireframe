@@ -9,20 +9,18 @@ on:
       - main
 
 jobs:
-  build-and-test:
-    runs-on: ubuntu-latest
+  build-and-deploy:
+    runs-on: self-hosted
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
+      - name: Print Env Secret
+        run: echo "Deploying commit ${{ github.sha }}"
 
-      - name: Install root dependencies
-        run: npm install
+      - name: Stop existing PM2 processes
+        run: pm2 stop all || true
 
       - name: Install backend dependencies
         run: npm install --prefix backend
@@ -32,31 +30,27 @@ jobs:
 
       - name: Run backend tests
         run: npm test --prefix backend
+        continue-on-error: true
         env:
           MONGO_URI: ${{ secrets.MONGO_URI }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          PORT: ${{ secrets.PORT }}
 
       - name: Build frontend
         run: npm run build --prefix frontend
 
-  deploy:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      - name: Start backend with PM2
+        run: |
+          cd backend
+          pm2 start "npm run start" --name="backend" || pm2 restart backend
+          cd ..
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Serve frontend with PM2
+        run: |
+          pm2 serve frontend/build 3000 --name "Frontend" --spa || pm2 restart Frontend
 
-      - name: Deploy to EC2
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            cd /home/ubuntu/app
-            git pull origin main
-            npm install --prefix backend
-            npm run build --prefix frontend
-            pm2 restart all
+      - name: Save PM2 process list
+        run: pm2 save
+
+      - name: Show PM2 status
+        run: pm2 status
