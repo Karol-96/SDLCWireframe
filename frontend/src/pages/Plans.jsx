@@ -1,5 +1,5 @@
-import { useState, useEffect,useCallback } from 'react';
-import { Link,useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import axiosInstance from '../axiosConfig';
 
@@ -41,7 +41,7 @@ const Plans = () =>{
     }
   };
 
-  // filtering logic - TODO: maybe add sort by date too?
+  // filtering logic - TODO: maybe add sort by date to this in future versions
   const filterdPlans = plans.filter(plan =>{
     const matchsSearch = plan.planName.toLowerCase().includes(searchTerm.toLowerCase());
     const matchGoal = filterGoal === 'all' || plan.goal === filterGoal;

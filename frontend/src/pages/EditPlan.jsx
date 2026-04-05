@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import {useNavigate, useParams, Link} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {useAuth} from '../context/AuthContext';
 import axiosInstance from '../axiosConfig';
 // import { format } from 'date-fns'; // removed - just using split('T') instead

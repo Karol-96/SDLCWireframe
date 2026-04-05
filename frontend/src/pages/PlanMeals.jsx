@@ -34,6 +34,7 @@ const PlanMeals = () => {
 
   useEffect(()=>{
     if(user) fetchPlan()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[id,user])
 
   const handleMealChange =(e)=>{
